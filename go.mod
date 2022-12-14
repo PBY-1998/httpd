@@ -1,4 +1,4 @@
-module httpd
+module github.com/PBY-1998/httpd
 
 go 1.18
 
