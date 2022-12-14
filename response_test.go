@@ -13,7 +13,14 @@ import (
 var responseHandler = NewRespHandler()
 
 func Test_Success(t *testing.T) {
-	res := responseHandler.Success(OK, "api返回成功")
+	type User struct {
+		name string `json:"name"`
+	}
+	res := responseHandler.Success(OK, []User{
+		{
+			name: "222",
+		},
+	})
 	fmt.Println(res)
 }
 

@@ -5,17 +5,13 @@
 **/
 package httpd
 
-import (
-	"encoding/json"
-)
-
 type respHandler struct {
 	*resp
 }
 
 type respHandlerInterface interface {
-	Success(code int, data interface{}) string
-	Error(code int, msg interface{}) string
+	Success(code int, data interface{}) *resp
+	Error(code int, msg interface{}) *resp
 }
 
 // NewRespHandler 构造函数
@@ -24,15 +20,13 @@ func NewRespHandler() respHandlerInterface {
 }
 
 //Success 通用返回成功
-func (h *respHandler) Success(code int, data interface{}) string {
-	response := newResp(code, "success", data, nil)
-	res, _ := json.Marshal(response)
-	return string(res)
+func (h *respHandler) Success(code int, data interface{}) *resp {
+	return newResp(code, "success", data, nil)
+	//res, _ := json.Marshal(response)
+	//return string(res)
 }
 
 // Error 通用返回失败
-func (h *respHandler) Error(code int, msg interface{}) string {
-	response := newResp(code, "error", nil, msg)
-	res, _ := json.Marshal(response)
-	return string(res)
+func (h *respHandler) Error(code int, msg interface{}) *resp {
+	return newResp(code, "error", nil, msg)
 }
