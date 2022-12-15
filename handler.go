@@ -5,28 +5,36 @@
 **/
 package httpd
 
-type respHandler struct {
-	*resp
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
+
+// Handler 封装gin.Context
+type Context struct {
+	*gin.Context
 }
 
-type respHandlerInterface interface {
-	Success(code int, data interface{}) *resp
-	Error(code int, msg interface{}) *resp
+func Handler(ctx *gin.Context) Handlerer {
+	return &Context{ctx}
 }
 
-// NewRespHandler 构造函数
-func NewRespHandler() respHandlerInterface {
-	return &respHandler{}
+type Handlerer interface {
+	Success(code int, data interface{})
+	Error(code int, err interface{})
 }
 
-//Success 通用返回成功
-func (h *respHandler) Success(code int, data interface{}) *resp {
-	return newResp(code, "success", data, nil)
-	//res, _ := json.Marshal(response)
-	//return string(res)
+func (c *Context) Success(code int, data interface{}) {
+	resp := newResponse()
+	resp.Data = data
+	resp.Msg = http.StatusText(code)
+	c.JSON(code, resp)
 }
 
-// Error 通用返回失败
-func (h *respHandler) Error(code int, msg interface{}) *resp {
-	return newResp(code, "error", nil, msg)
+func (c *Context) Error(code int, err interface{}) {
+	resp := newResponse()
+	resp.Msg = http.StatusText(code)
+	resp.Code = code
+	resp.Error = err
+	c.JSON(code, resp)
 }
