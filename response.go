@@ -6,7 +6,7 @@
 package httpd
 
 import (
-	"github.com/google/uuid"
+	"github.com/satori/go.uuid"
 )
 
 type response struct {
@@ -19,9 +19,8 @@ type response struct {
 
 // 构造函数
 func newResponse() *response {
-	var id, _ = uuid.NewUUID() // request 唯一uuid
 	return &response{
-		RequestId: id.String(),
+		RequestId: uuid.Must(uuid.NewV4(), nil).String(),
 		Code:      200,
 		Msg:       "",
 		Data:      nil,
