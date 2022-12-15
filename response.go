@@ -9,8 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-var id, _ = uuid.NewUUID() // request 唯一uuid
-
 type response struct {
 	RequestId string      `json:"requestId"`       // 请求uuid
 	Code      int         `json:"code"`            // 错误码
@@ -21,6 +19,7 @@ type response struct {
 
 // 构造函数
 func newResponse() *response {
+	var id, _ = uuid.NewUUID() // request 唯一uuid
 	return &response{
 		RequestId: id.String(),
 		Code:      200,
